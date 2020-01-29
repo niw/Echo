@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 class AudioEchoSession: NSObject {
-    private var audioEngine = AVAudioEngine()
+    private var audioEngine: AVAudioEngine?
 
     override init() {
         super.init()
@@ -21,10 +21,36 @@ class AudioEchoSession: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesDidLost(_:)), name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesDidReset(_:)), name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
 
-        resetAudioSession()
+        do {
+            try resetAudioSession()
+            resetAudioEngine()
+        } catch {
+            print(error)
+        }
+    }
 
+    enum AudioSessionPortDescriptionUID: String {
+        case WiredMicrophone = "Wired Microphone"
+    }
+
+    private func resetAudioSession() throws {
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers, .allowBluetoothA2DP])
+        try session.setPreferredInput(session.availableInputs?.first(where: { (description) -> Bool in
+            return description.uid == AudioSessionPortDescriptionUID.WiredMicrophone.rawValue
+        }))
+    }
+
+    private func resetAudioEngine() {
+        if let audioEngine = audioEngine {
+            audioEngine.stop()
+            self.audioEngine = nil
+        }
+
+        let audioEngine = AVAudioEngine()
         audioEngine.connect(audioEngine.inputNode, to: audioEngine.mainMixerNode, format: nil)
         audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: nil)
+        self.audioEngine = audioEngine
     }
 
     private(set) var isRunning: Bool = false
@@ -33,43 +59,58 @@ class AudioEchoSession: NSObject {
         guard !isRunning else { return }
 
         do {
-            try self.audioEngine.start()
-            self.isRunning = true
+            try startSession()
+            isRunning = true
         } catch {
             print(error)
         }
     }
 
+    private func startSession() throws {
+        try AVAudioSession.sharedInstance().setActive(true)
+        try audioEngine!.start() // Intentionally forcibly unwrap or assert crash.
+    }
+
     func stop() {
         guard isRunning else { return }
 
-        self.audioEngine.stop()
-        isRunning = false
+        do {
+            try stopSession()
+            isRunning = false
+        } catch {
+            print(error)
+        }
+    }
+
+    private func stopSession() throws {
+        audioEngine!.stop() // Intentionally forcibly unwrap or assert crash.
+        try AVAudioSession.sharedInstance().setActive(false)
     }
 
     // MARK: - Notifications
 
     @objc
     public func audioSessionDidInterrupt(_ notification: NSNotification) {
-        guard let interruptionTypeNumber = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? NSNumber,
-            let interruptionType = AVAudioSession.InterruptionType(rawValue: interruptionTypeNumber.uintValue) else {
+        // Making a phone call can reach here.
+
+        guard let userInfo = notification.userInfo,
+            let interruptionTypeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let interruptionType = AVAudioSession.InterruptionType(rawValue: interruptionTypeValue) else {
                 return
         }
 
-        print(interruptionType)
-
         switch interruptionType {
         case .began:
-            // nothing we can do
-            break
+            print("interruption began")
         case .ended:
-            resetAudioSession()
-            if (isRunning) {
-                do {
-                    try self.audioEngine.start()
-                } catch {
-                    print(error)
-                }
+            print("interruption end")
+
+            guard let interruptionOptionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else {
+                return
+            }
+            let interruptionOptions = AVAudioSession.InterruptionOptions(rawValue: interruptionOptionsValue)
+            if interruptionOptions.contains(.shouldResume) && isRunning {
+                resumeSession()
             }
         default:
             break
@@ -88,20 +129,18 @@ class AudioEchoSession: NSObject {
 
     @objc
     public func audioSessionMediaServicesDidReset(_ notification: NSNotification) {
-        // TODO: implement this.
+        // See General recommendations for handling `AVAudioSessionMediaServicesWereResetNotification`
+        // at <https://developer.apple.com/library/archive/qa/qa1749/_index.html>
+        resumeSession()
     }
 
-    enum AudioSessionPortDescriptionUID: String {
-        case WiredMicrophone = "Wired Microphone"
-    }
-
-    private func resetAudioSession() {
+    private func resumeSession() {
         do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers, .allowBluetoothA2DP])
-            try session.setPreferredInput(session.availableInputs?.first(where: { (description) -> Bool in
-                return description.uid == AudioSessionPortDescriptionUID.WiredMicrophone.rawValue
-            }))
+            try resetAudioSession()
+            resetAudioEngine()
+            if (isRunning) {
+                try startSession()
+            }
         } catch {
             print(error)
         }
