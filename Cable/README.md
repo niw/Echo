@@ -16,7 +16,7 @@ Schematic
 
 Here is a schematic of the circuit of the cable.
 
-![Schematic](Cable.png)
+![Schematic](Resources/schematic.png)
 
 - `JP1` is for input from 3.5mm audio headphone jack.
 - `JP2` is for output to 3.5mm audio headphone jack with microphone input. See the following section about the details.
@@ -35,9 +35,13 @@ All iOS devices use 4 pins 3.5mm Tip Ring Ring Shield (TRRS) headphone jack that
 
 That means, each pin is for left, right, GND then microphone in this order from tip to shield.
 
-![CTIA](CTIA.png)
+![CTIA](Resources/ctia.png)
 
-Assembly
---------
+Implementation
+--------------
 
 You can implement this circuit inside of each end of the 3.5mm audio jack header.
+
+![Cable implementation example](Resources/cable.jpg)
+
+![Cable heads](Resources/cable_heads.jpg)
