@@ -7,15 +7,12 @@
 //
 
 import AVFoundation
-import Combine
 import Foundation
 
-class AudioEchoSession: NSObject {
+final class AudioEchoSession {
     private var audioEngine: AVAudioEngine?
 
-    override init() {
-        super.init()
-
+    init() {
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionDidInterrupt(_:)), name: AVAudioSession.interruptionNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteDidChanged(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesDidLost(_:)), name: AVAudioSession.mediaServicesWereLostNotification, object: nil)

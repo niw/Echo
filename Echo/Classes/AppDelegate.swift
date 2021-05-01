@@ -8,9 +8,8 @@
 
 import UIKit
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate
-{
+@main
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     var audioEchoSession: AudioEchoSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
