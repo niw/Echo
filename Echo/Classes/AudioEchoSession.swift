@@ -102,11 +102,12 @@ final class AudioEchoSession {
         case .ended:
             print("interruption end")
 
-            guard let interruptionOptionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else {
-                return
-            }
-            let interruptionOptions = AVAudioSession.InterruptionOptions(rawValue: interruptionOptionsValue)
-            if interruptionOptions.contains(.shouldResume) && isRunning {
+            // NOTE: Based on the documentation, apps that don’t require user input to begin audio
+            // playback can ignore `shouldResume` flag in `AVAudioSession.InterruptionOptions`
+            // for `AVAudioSessionInterruptionOptionKey` and resume playback when an interruption ends.
+            // See `AVAudioSession.InterruptionOptions.shouldResume`
+            if isRunning {
+                // TODO: do we really need to reconstruct audio engine? probably not.
                 resumeSession()
             }
         default:
