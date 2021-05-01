@@ -10,6 +10,8 @@ import AVFoundation
 import Foundation
 
 final class AudioEchoSession {
+    static let shared: AudioEchoSession = .init()
+
     private var audioEngine: AVAudioEngine?
 
     init() {

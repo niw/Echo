@@ -6,21 +6,28 @@
 //  Copyright © 2019 Yoshimasa Niwa. All rights reserved.
 //
 
-import UIKit
+import Combine
 import SwiftUI
+import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
+    var cancellableSet: Set<AnyCancellable> = []
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        let viewModel = ViewModel()
+        viewModel.$isRunning.sink { isRunning in
+            if isRunning {
+                AudioEchoSession.shared.start()
+            } else {
+                AudioEchoSession.shared.stop()
+            }
+        }.store(in: &cancellableSet)
 
-        // Create the SwiftUI view that provides the window contents.
         let mainView = MainView()
+            .environmentObject(viewModel)
 
-        // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: mainView)

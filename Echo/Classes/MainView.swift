@@ -9,15 +9,28 @@
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject
+    var viewModel: ViewModel
+
     var body: some View {
-        VStack {
-            Text("Use Control Center to change output device from headphones to Bluetooth audio device such as AirPods.")
-        }.padding()
+        NavigationView {
+            Form {
+                Section {
+                    Toggle(isOn: $viewModel.isRunning) {
+                        Text("Microphone to headphones")
+                    }
+                    Text("Use Control Center to change output device from headphones to Bluetooth audio device such as AirPods.")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .navigationBarTitle("Echo")
+        }
     }
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
+            .environmentObject(ViewModel())
     }
 }
