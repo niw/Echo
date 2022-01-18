@@ -83,6 +83,7 @@
 				54D3C44D23CCD7CA00FEFABE /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		54D3C44D23CCD7CA00FEFABE /* Products */ = {
 			isa = PBXGroup;
