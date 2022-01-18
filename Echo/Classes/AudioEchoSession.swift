@@ -17,7 +17,7 @@ final class AudioEchoSession {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionDidInterrupt(_:)), name: AVAudioSession.interruptionNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionRouteDidChanged(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesDidLost(_:)), name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesWereLost(_:)), name: AVAudioSession.mediaServicesWereLostNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioSessionMediaServicesDidReset(_:)), name: AVAudioSession.mediaServicesWereResetNotification, object: nil)
 
         do {
@@ -123,7 +123,7 @@ final class AudioEchoSession {
     }
 
     @objc
-    public func audioSessionMediaServicesDidLost(_ notification: NSNotification) {
+    public func audioSessionMediaServicesWereLost(_ notification: NSNotification) {
         // TODO: implement this.
     }
 
