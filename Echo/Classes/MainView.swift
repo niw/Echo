@@ -25,6 +25,7 @@ struct MainView: View {
             }
             .navigationBarTitle("Echo")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

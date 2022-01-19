@@ -18,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D95AF122796D66500F19223 /* DEVELOPMENT_TEAM.template.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DEVELOPMENT_TEAM.template.xcconfig; sourceTree = "<group>"; };
+		3D95AF132796D66500F19223 /* DEVELOPMENT_TEAM.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DEVELOPMENT_TEAM.xcconfig; sourceTree = "<group>"; };
+		3D95AF142796D66600F19223 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		5434B09C23CCD95A003B78E4 /* AudioEchoSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEchoSession.swift; sourceTree = "<group>"; };
 		54782590263D34C700626A7C /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		54D3C44C23CCD7CA00FEFABE /* Echo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,6 +44,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D95AF112796D66500F19223 /* Xcode-config */ = {
+			isa = PBXGroup;
+			children = (
+				3D95AF122796D66500F19223 /* DEVELOPMENT_TEAM.template.xcconfig */,
+				3D95AF132796D66500F19223 /* DEVELOPMENT_TEAM.xcconfig */,
+				3D95AF142796D66600F19223 /* Shared.xcconfig */,
+			);
+			path = "Xcode-config";
+			sourceTree = "<group>";
+		};
 		540DB52F23CCD856001A8D0A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,10 +78,12 @@
 		54D3C44323CCD7CA00FEFABE = {
 			isa = PBXGroup;
 			children = (
+				3D95AF112796D66500F19223 /* Xcode-config */,
 				54D3C44E23CCD7CA00FEFABE /* Echo */,
 				54D3C44D23CCD7CA00FEFABE /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		54D3C44D23CCD7CA00FEFABE /* Products */ = {
 			isa = PBXGroup;
@@ -192,6 +207,7 @@
 /* Begin XCBuildConfiguration section */
 		54D3C45E23CCD7CB00FEFABE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D95AF142796D66600F19223 /* Shared.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -253,6 +269,7 @@
 		};
 		54D3C45F23CCD7CB00FEFABE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D95AF142796D66600F19223 /* Shared.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -310,9 +327,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Echo/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Echo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -332,9 +349,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Echo/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Echo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
